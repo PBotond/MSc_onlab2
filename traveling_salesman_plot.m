@@ -5,12 +5,11 @@ function state = traveling_salesman_plot(options,state,flag,locations)
 %   to the traveling salesman problem.
 
 %   Copyright 2004-2006 The MathWorks, Inc.
-persistent x y xx yy
-if strcmpi(flag,'init')
-  load('usborder.mat','x','y','xx','yy');
-end
+persistent x y
+
+clf;
 plot(x,y,'Color','red');
-axis([-0.1 1.5 -0.2 1.2]);
+axis("auto");
 
 hold on;
 [unused,i] = min(state.Score);
