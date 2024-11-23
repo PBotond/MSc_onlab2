@@ -1,4 +1,4 @@
-function path = ga_plan(omap, omx, cp_params)
+function [path, free_cells, distances] = ga_plan(omap, omx, cp_params)
 
 % Count free cells
 free_count = cp_params.mapHeightY*cp_params.mapWidthX - sum(sum(omx));
@@ -53,7 +53,7 @@ numberOfVariables = free_count;
 path_cells = x{1};
 path = [];
 min_dist = min(min(distances));
-j = length(path_cells)
+j = length(path_cells);
 for i = 1 : j-1
     if distances(path_cells(i), path_cells(i+1)) == min_dist
         path = [path; [free_cells(path_cells(i),1) free_cells(path_cells(i),2) 0]];
@@ -64,11 +64,11 @@ for i = 1 : j-1
 end
 
 if distances(path_cells(j-1), path_cells(j)) == min_dist
-        path = [path; [free_cells(path_cells(j),1) free_cells(path_cells(j),2) 0]];
-    else
-        planned_path = plan(planner, [free_cells(path_cells(j-1),1) free_cells(path_cells(j-1),2)], [free_cells(path_cells(j), 1) free_cells(path_cells(j), 2)]);
-        path = [path; [planned_path ones(length(planned_path), 1)]];
-    end
+    path = [path; [free_cells(path_cells(j),1) free_cells(path_cells(j),2) 0]];
+else
+    planned_path = plan(planner, [free_cells(path_cells(j-1),1) free_cells(path_cells(j-1),2)], [free_cells(path_cells(j), 1) free_cells(path_cells(j), 2)]);
+    path = [path; [planned_path ones(length(planned_path), 1)]];
+end
 
 
 

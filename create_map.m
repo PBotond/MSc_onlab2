@@ -1,6 +1,9 @@
 function [omap] = create_map(mapHeightY, mapWidthX, obstacleMaxSize, numberOfObstacles)
 %CREATE_MAP Create occupancy map with paramters
 % Create the binary occupancy map object
+mapWidthX = mapWidthX;
+mapHeightY = mapHeightY;
+
 omap = binaryOccupancyMap(mapWidthX, mapHeightY);
 
 % Generate obstacles
@@ -29,6 +32,15 @@ while obstacleNumber <= numberOfObstacles
 
     obstacleNumber = obstacleNumber + 1;
 end
+borderxy = [];
+for i = 1:mapWidthX
+    borderxy = [borderxy; 1 i; mapHeightY i];
+end
+for i = 1:mapHeightY
+    borderxy = [borderxy; i 1; i mapWidthX];
+end
+setOccupancy(omap, borderxy, 1);
+
 disp("Map generated.")
 end
 

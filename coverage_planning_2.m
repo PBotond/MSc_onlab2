@@ -3,15 +3,15 @@ clc;
 close all;
 
 %% Set map parameters
-cp_params.newMap = false;
+cp_params.newMap = true;
 cp_params.randomMap = true;
 cp_params.randomSeed = 10;
 cp_params.startXY = [1 1];
 
 
-cp_params.mapHeightY = 6;
-cp_params.mapWidthX = 6;
-cp_params.numberOfObstacles = 1;
+cp_params.mapHeightY = 10;
+cp_params.mapWidthX = 10;
+cp_params.numberOfObstacles = 2;
 cp_params.obstacleMaxSize = 2;
 
 global maxscores
@@ -31,8 +31,9 @@ omx = double(occupancyMatrix(omap));
 
 %% Classic planning
 [classic_path, classic_wf] = classic_plan(omap, omx, cp_params);
-ga_path = ga_plan(omap, omx, cp_params);
-
+[ga_path, free_cells, distances] = ga_plan(omap, omx, cp_params);
+classic_score = classic_fitness(free_cells, classic_path, distances);
 %% Plots
 single_plot(classic_wf, omx, classic_path);
 single_plot(classic_wf, omx, ga_path);
+fitness_plot(maxscores);
