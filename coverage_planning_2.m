@@ -9,8 +9,8 @@ cp_params.randomSeed = 10;
 cp_params.startXY = [1 1];
 
 
-cp_params.mapHeightY = 10;
-cp_params.mapWidthX = 10;
+cp_params.mapHeightY = 8;
+cp_params.mapWidthX = 8;
 cp_params.numberOfObstacles = 2;
 cp_params.obstacleMaxSize = 2;
 
@@ -31,9 +31,12 @@ omx = double(occupancyMatrix(omap));
 
 %% Classic planning
 [classic_path, classic_wf] = classic_plan(omap, omx, cp_params);
+if (isnan(classic_path))
+    return
+end
 [ga_path, free_cells, distances] = ga_plan(omap, omx, cp_params);
 classic_score = classic_fitness(free_cells, classic_path, distances);
 %% Plots
-single_plot(classic_wf, omx, classic_path);
-single_plot(classic_wf, omx, ga_path);
+single_plot(classic_wf, omx, classic_path, true);
+single_plot(classic_wf, omx, ga_path, false);
 fitness_plot(maxscores);

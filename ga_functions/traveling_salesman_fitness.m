@@ -1,12 +1,7 @@
 function scores = traveling_salesman_fitness(x,distances,free_cells)
-%TRAVELING_SALESMAN_FITNESS  Custom fitness function for TSP. 
-%   SCORES = TRAVELING_SALESMAN_FITNESS(X,DISTANCES) Calculate the fitness 
-%   of an individual. The fitness is the total distance traveled for an
-%   ordered set of cities in X. DISTANCE(A,B) is the distance from the city
-%   A to the city B.
 
-%   Copyright 2004-2007 The MathWorks, Inc.
 global maxscores;
+global minscores;
 scores = zeros(size(x,1),1);
 for j = 1:size(x,1)
     % here is where the special knowledge that the population is a cell
@@ -30,3 +25,4 @@ for j = 1:size(x,1)
     scores(j) = f;
 end
 maxscores = [maxscores; min(scores)];
+minscores = [minscores; max(scores)];
