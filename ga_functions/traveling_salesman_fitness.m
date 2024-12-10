@@ -1,7 +1,6 @@
 function scores = traveling_salesman_fitness(x,distances,free_cells)
 
 global maxscores;
-global minscores;
 scores = zeros(size(x,1),1);
 for j = 1:size(x,1)
     % here is where the special knowledge that the population is a cell
@@ -18,11 +17,10 @@ for j = 1:size(x,1)
         x_next = free_cells(p(i+1), 1);
         y_next = free_cells(p(i+1), 2);
         if (prod([x_curr y_curr] - [x_prev y_prev] == [x_next y_next] - [x_curr y_curr]) ~= 1)
-            f= f+2;
+            f= f+4;
         end
     end
     f = f + distances(p(end-1), p(end));
     scores(j) = f;
 end
 maxscores = [maxscores; min(scores)];
-minscores = [minscores; max(scores)];

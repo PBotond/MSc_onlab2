@@ -5,21 +5,19 @@ clear all;
 
 %% Set map parameters
 iter = 1;
+gawin = 0;
 data_max = {};
-data_min = {};
 cp_params.startXY = [1 1];
-cp_params.mapHeightY = 10;
-cp_params.mapWidthX = 10;
-cp_params.numberOfObstacles = 2;
-cp_params.obstacleMaxSize = 2;
+cp_params.mapHeightY = 7;
+cp_params.mapWidthX = 7;
+cp_params.numberOfObstacles = 3;
+cp_params.obstacleMaxSize = 1;
 global maxscores
-global minscores
 gatimes = [];
 classictimes = [];
-while(height(data_max)<10)
+while(height(data_max)<100)
     disp(iter);
     maxscores = [];
-    minscores = [];
     iter = iter+1;
     cp_params.randomSeed = iter;
     rng(cp_params.randomSeed,"twister");
@@ -27,23 +25,26 @@ while(height(data_max)<10)
     omx = double(occupancyMatrix(omap));
     tic;
     [classic_path, classic_wf] = classic_plan(omap, omx, cp_params);
-    classictimes = [classictimes; toc];
     if(~isnan(classic_path))
+        classictimes = [classictimes; toc];
+
         tic;
         [ga_path, free_cells, distances] = ga_plan(omap, omx, cp_params);
         gatimes = [gatimes; toc];
+        gascore = min(maxscores)
         classic_score = classic_fitness(free_cells, classic_path, distances);
         data_max = [data_max; maxscores];
-        data_min = [data_min; minscores];
+        if(gascore < classic_score)
+            gawin = gawin+1;
+        end
     end
 end
 
 %%
-cscores = []
+cscores = [];
 for(i=1:height(data_max))
     cscores = [cscores; data_max{i}(end)];
     data_max{i} = data_max{i}(1:end-1);
-    data_min{i} = data_min{i}(1:end-1);
 end
 
 %%
@@ -78,9 +79,9 @@ ylabel("Fitness-érték");
 
 %%
 disp(min(classictimes))
-disp(max(classictimes))
 disp(median(classictimes))
+disp(max(classictimes))
 
 disp(min(gatimes))
-disp(max(gatimes))
 disp(median(gatimes))
+disp(max(gatimes))
